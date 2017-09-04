@@ -166,10 +166,7 @@ namespace SGcomboLib.WebUtils
                 }
             }
 
-            loHttp = null;
-
-
-
+        
             return lcHtml;
         }
     }
