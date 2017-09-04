@@ -22,6 +22,15 @@ namespace SGcombo.FileUtils
     public class CsvReader
     {
 
+        public static bool IsNumber(String value)
+        {
+            if (value == null || value == "") return false;
+            String pattern = @"-?\d*(\.\d+)?";
+            bool ret =   Regex.IsMatch(value, pattern);
+            return ret;
+       
+        }
+
 
         public  string GetValue(String key)
         {
