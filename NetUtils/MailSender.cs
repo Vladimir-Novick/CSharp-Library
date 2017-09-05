@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mail;
 
-namespace SGcombo.WebUtils
+namespace SGcombo.NetUtils
 {
 
 
@@ -24,16 +24,16 @@ namespace SGcombo.WebUtils
     {
 	// <summary>Send eMail message</summary> 
 	//
-        //  <para>strSMTPServer -  "smtp.smtpmail.com"</para>
-        //  <para> from - "your mail@smtpmail.com"</para>
-        //  <para> to - "my_recipient@mail.com"</para>
-        //  <para>subject - "subject message"</para>
-        //  <para>body - "mail body "</para>
-        //  <para>isBodyHTML  true/false</para>
-        //  <para>attachmentFileName - "c:/attacments/datafile.pdf"</para>
-        //  <para>credentionalEMAIL - "your mail@smtpmail.com"</para>
-        //  <para>credentionalPassword -"your email password"</para>
-        //  <para>port</para>
+        //  <param name="strSMTPServer" > -  "smtp.smtpmail.com"</param>
+        //  <param name="from" >  - "your mail@smtpmail.com"</param>
+        //  <param name="to" > to - "my_recipient@mail.com"</param>
+        //  <param name="subject" > - "subject message"</param>
+        //  <param name="body" >body - "mail body "</param>
+        //  <param name="isBodyHTML" >  true/false</param>
+        //  <param name="attachmentFileName" > - "c:/attacments/datafile.pdf"</param>
+        //  <param name="credentionalEMAIL" > - "your mail@smtpmail.com"</param>
+        //  <param name="credentionalPassword" > -"your email password"</param>
+        //  <param name="port" >port</para>
         // 
         public void SendMail(
                          string strSMTPServer,
