@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Runtime.InteropServices;
 using System.Net.NetworkInformation;
+using Newtonsoft.Json; 
+using System.Xml;
 
 namespace SGcombo.Utils
 {
@@ -19,7 +21,7 @@ namespace SGcombo.Utils
 ////////////////////////////////////////////////////////////////////////////
 //	Copyright 2004 - 2017 : Vladimir Novick    https://www.linkedin.com/in/vladimirnovick/  
 //        
-//             https://github.com/Vladimir-Novick/CSharp-Utility-Classes
+//             https://github.com/Vladimir-Novick/CSharp-Library
 //
 //    NO WARRANTIES ARE EXTENDED. USE AT YOUR OWN RISK. 
 //
@@ -104,6 +106,68 @@ namespace SGcombo.Utils
 
 			throw new Exception(sMsg);
 		}
+		
+		
+		
+		public static string XMLPrettify(string XML)
+        {
+
+            String Result = "";
+
+            using (MemoryStream mStream = new MemoryStream())
+            {
+                XmlTextWriter writer = new XmlTextWriter(mStream, Encoding.Unicode);
+                XmlDocument document = new XmlDocument();
+
+                try
+                {
+                    // Load the XmlDocument with the XML.
+                    document.LoadXml(XML);
+
+                    writer.Formatting = System.Xml.Formatting.Indented;
+
+                    // Write the XML into a formatting XmlTextWriter
+                    document.WriteContentTo(writer);
+                    writer.Flush();
+                    mStream.Flush();
+
+                    // Have to rewind the MemoryStream in order to read
+                    // its contents.
+                    mStream.Position = 0;
+
+                    // Read MemoryStream contents into a StreamReader.
+                    StreamReader sReader = new StreamReader(mStream);
+
+                    // Extract the text from the StreamReader.
+                    Result = sReader.ReadToEnd();
+
+                     writer.Close();
+                }
+                catch (XmlException)
+                {
+                }
+
+            }
+          
+
+            return Result;
+        }
+		
+		
+	     public static string JsonPrettify(string json)
+        {
+
+            try
+            {
+                dynamic parsedJson = JsonConvert.DeserializeObject(json);
+                return JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+     
+            } catch ( Exception ex)
+            {
+
+            }
+            return json;
+        }
 
 		/// <summary>
 		/// Convert a byte array
