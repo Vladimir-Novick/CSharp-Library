@@ -22,7 +22,7 @@ namespace SGcombo.NetUtils
 ////////////////////////////////////////////////////////////////////////////
 //	Copyright 2004 - 2017 : Vladimir Novick    https://www.linkedin.com/in/vladimirnovick/  
 //        
-//             https://github.com/Vladimir-Novick/CSharp-Utility-Classes
+//             https://github.com/Vladimir-Novick/CSharp-Library
 //
 //    NO WARRANTIES ARE EXTENDED. USE AT YOUR OWN RISK. 
 //
