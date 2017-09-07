@@ -40,10 +40,31 @@ namespace SGcombo.SysUtils
 
             return secure;
         }
+        
+        public  TaskAdapter()
+        {
+        }
+        
+        
+        
+        ///
+        /// <summary> Create Task Adapter with domain Credentional </summary> 
+        /// 
+        /// <param name="UserName">Domain Used Name</param>
+        /// <param name="Password">Domain user name Password</param>
+        /// <param name="Domain">Domain Name</param>
+        ///
+        
+        public  TaskAdapter(String Username,String Password,String Domain)
+        {
+            username = Username;
+            password = Password;
+            domain = Domain;
+        }
 
-        public String username = null;
-        public String password = null;
-        public String domain = null;
+        private String username = null;
+        private String password = null;
+        private String domain = null;
 
         private StringBuilder strSummaryOutputString = new StringBuilder();
 
@@ -62,9 +83,11 @@ namespace SGcombo.SysUtils
 
                 StartInfo.UseShellExecute = false;
 
-                StartInfo.UserName = username;
-                StartInfo.Password = MakeSecureString(password);
-                StartInfo.Domain = domain;
+                if ( username != null ) {
+                    StartInfo.UserName = username;
+                    StartInfo.Password = MakeSecureString(password);
+                    StartInfo.Domain = domain;
+                }
 
                 foreach (EnvironmentVariable variable in EnvironmentVariables)
                 {
