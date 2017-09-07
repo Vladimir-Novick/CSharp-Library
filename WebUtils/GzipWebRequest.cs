@@ -24,6 +24,75 @@ namespace SGcomboLib.WebUtils
     public class GzipWebRequest
     {
 
+        
+        private String userName = null;
+        private String password = null;
+        private String domain = null;
+        
+        
+        ///
+        /// <summary> Create Domain Credentional </summary> 
+        /// 
+        /// <param name="UserName">Domain Used Name</param>
+        /// <param name="Password">Domain user name Password</param>
+        /// <param name="Domain">Domain Name</param>
+        ///
+
+        public GzipWebRequest(string UserName, string Password, string Domain = null)
+        {
+            userName = UserName;
+            password = Password;
+            domain = Domain;
+        }
+
+        ///
+        /// <summary> Create Simple Credentional </summary> 
+        /// 
+        /// <param name="UserName">Domain Used Name</param>
+        /// <param name="Password">Domain user name Password</param>
+        ///
+        public GzipWebRequest(string UserName, string Password)
+        {
+            userName = UserName;
+            password = Password;
+
+        }
+
+		///
+        /// <summary> Create Default Credentional </summary> 
+        ///
+        public GzipWebRequest()
+        {
+
+
+        }
+
+        
+        private System.Net.NetworkCredential GetCredentional(){
+            
+            
+               System.Net.NetworkCredential credential = null;
+            
+              if ( userName == null ) {
+                  return CredentialCache.DefaultCredentials;
+              }
+            
+                if (domain == null)
+                {
+                    credential = new System.Net.NetworkCredential(userName, password);
+                }
+                else
+                {
+                    credential= new System.Net.NetworkCredential(userName, password, domain);
+                }
+            
+            return credential;
+            
+            
+        }
+        
+        
+        
         public int Timeout = 170000;
         public string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36";
         public string ContentType = "application/x-www-form-urlencoded";
@@ -71,6 +140,7 @@ namespace SGcomboLib.WebUtils
             loHttp.KeepAlive = KeepAlive;
             loHttp.AllowAutoRedirect = AllowAutoRedirect;
             loHttp.CookieContainer = CookieContainer;
+            loHttp.Credentials = GetCredentional();
             loHttp.Accept = Accept;
 
             // *** Set properties
@@ -112,6 +182,7 @@ namespace SGcomboLib.WebUtils
             loHttp.KeepAlive = KeepAlive;
             loHttp.AllowAutoRedirect = AllowAutoRedirect;
             loHttp.CookieContainer = CookieContainer;
+            loHttp.Credentials = GetCredentional();
             loHttp.Accept = Accept;
 
             // *** Set properties

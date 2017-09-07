@@ -6,8 +6,6 @@ using System.Text;
 namespace SGcombo.WebUtils
 {
 
-
-
 ////////////////////////////////////////////////////////////////////////////
 //	Copyright 2017 : Vladimir Novick    https://www.linkedin.com/in/vladimirnovick/  
 //        
