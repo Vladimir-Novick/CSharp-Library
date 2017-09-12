@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 
 namespace SGcombo.WebUtils
 {
@@ -16,7 +17,6 @@ namespace SGcombo.WebUtils
 // To contact the author with suggestions or comments, use  :vlad.novick@gmail.com
 //
 ////////////////////////////////////////////////////////////////////////////
-
     public class CredentialsWebRequest
     {
 
@@ -27,7 +27,7 @@ namespace SGcombo.WebUtils
         public bool KeepAlive = true;
         public bool AllowAutoRedirect = true;
         public CookieContainer CookieContainer = new CookieContainer();
-        
+
 
         public string Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 
@@ -71,16 +71,41 @@ namespace SGcombo.WebUtils
 
         }
 
-		///
-        /// <summary> Create Default Credentional </summary> 
-        ///
+        /// <summary> Create standard network Credentional </summary> 
         public CredentialsWebRequest()
         {
 
 
         }
 
-        private System.Net.NetworkCredential netCredential = null;
+        /// <summary> Request with repeat </summary> 
+        /// 
+        /// <param name="url">http request - string </param>
+        /// <param name="counter">max repeated counter</param>
+        /// <param name="deltaTime">time by count ( microsecond )</param>/// 
+        public string RepeatRequest(string url, int counter = 20, int deltaTime = 20000)
+        {
+            bool repeat = true;
+            int CountWait = 0;
+            String ret = ""; ;
+            while (repeat)
+            {
+                try
+                {
+                    ret = GetWebRequestReg(url);
+                    repeat = false;
+                }
+                catch (Exception)
+                {
+                    CountWait++;
+                    Console.WriteLine($"Wait {deltaTime * CountWait}");
+                    Thread.Sleep(deltaTime * CountWait);
+                    if (CountWait > counter) break;
+                }
+            }
+
+            return ret;
+        }
 
 
         public string GetWebRequestReg(string sUrl)
@@ -130,46 +155,36 @@ namespace SGcombo.WebUtils
             loHttp.ReadWriteTimeout = Timeout;
 
 
-
-
-
             loHttp.ContentType = ContentType;
 
+            //      var taskWrt = loPostData.WriteAsync(lbPostBuffer, 0, lbPostBuffer.Length);
+            //      taskWrt.Wait(Timeout);
 
+            // *** Retrieve request info headers
+            using (var task2 = loHttp.GetResponseAsync())
             {
+                task2.Wait(Timeout);
 
+                using (WebResponse response = task2.Result)
                 {
 
-                    //      var taskWrt = loPostData.WriteAsync(lbPostBuffer, 0, lbPostBuffer.Length);
-                    //      taskWrt.Wait(Timeout);
+                    Encoding enc = Encoding.UTF8;
 
-                    // *** Retrieve request info headers
-                    using (var task2 = loHttp.GetResponseAsync())
+                    using (Stream stream = response.GetResponseStream())
                     {
-                        task2.Wait(Timeout);
 
-                        using (WebResponse response = task2.Result)
+                        using (StreamReader requestReader = new StreamReader(stream, enc))
                         {
-
-                            Encoding enc = Encoding.UTF8;
-                            using (Stream stream = response.GetResponseStream())
+                            using (var retTask = requestReader.ReadToEndAsync())
                             {
-
-                                using (StreamReader requestReader = new StreamReader(stream, enc))
-                                {
-                                    using (var retTask = requestReader.ReadToEndAsync())
-                                    {
-                                        retTask.Wait(Timeout);
-                                        lcHtml = retTask.Result;
-                                    }
-                                }
+                                retTask.Wait(Timeout);
+                                lcHtml = retTask.Result;
                             }
                         }
-
                     }
                 }
-            }
 
+            }
 
             return lcHtml;
         }

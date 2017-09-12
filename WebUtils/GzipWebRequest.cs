@@ -10,7 +10,7 @@ namespace SGcomboLib.WebUtils
 
 
 ////////////////////////////////////////////////////////////////////////////
-//	Copyright 2017 : Vladimir Novick    https://www.linkedin.com/in/vladimirnovick/  
+//  Copyright 2017 : Vladimir Novick    https://www.linkedin.com/in/vladimirnovick/  
 //        
 //             https://github.com/Vladimir-Novick/CSharp-Utility-Classes
 //
@@ -58,7 +58,7 @@ namespace SGcomboLib.WebUtils
 
         }
 
-		///
+        ///
         /// <summary> Create Default Credentional </summary> 
         ///
         public GzipWebRequest()
