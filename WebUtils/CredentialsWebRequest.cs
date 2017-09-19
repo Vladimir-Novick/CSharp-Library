@@ -17,6 +17,9 @@ namespace SGcombo.WebUtils
 // To contact the author with suggestions or comments, use  :vlad.novick@gmail.com
 //
 ////////////////////////////////////////////////////////////////////////////
+/// <summary>
+///    
+/// </summary>
     public class CredentialsWebRequest
     {
 
@@ -108,35 +111,63 @@ namespace SGcombo.WebUtils
         }
 
 
+        private HttpWebRequest loHttp = null;
+
+        private CredentialCache myCredentialCache = null;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="strURL"></param>
+        /// <param name="UserName"></param>
+        /// <param name="SecurelyStoredPassword"></param>
+        /// <param name="Domain"></param>
+        public void setCredentionalCache(string strURL, string UserName, string SecurelyStoredPassword, string Domain = null)
+        {
+            myCredentialCache = new CredentialCache();
+            myCredentialCache.Add(new Uri(strURL), "Basic", new NetworkCredential(UserName, SecurelyStoredPassword));
+            if (Domain != null)
+            {
+                myCredentialCache.Add(new Uri(strURL), "Digest", new NetworkCredential(UserName, SecurelyStoredPassword, Domain));
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sUrl"></param>
+        /// <returns></returns>
         public string GetWebRequestReg(string sUrl)
         {
-            // http request
 
             string lcHtml = string.Empty;
 
-
-
-
-            HttpWebRequest loHttp = (HttpWebRequest)WebRequest.Create(sUrl);
-
-            if (userName == null)
+            loHttp = (HttpWebRequest)WebRequest.Create(sUrl);
+            if (myCredentialCache != null)
             {
-                loHttp.UseDefaultCredentials = true;
-                loHttp.PreAuthenticate = true;
-                loHttp.Credentials = CredentialCache.DefaultCredentials;
-
-            }
+                loHttp.Credentials = myCredentialCache;
+             }
             else
             {
-                loHttp.UseDefaultCredentials = false;
-                loHttp.PreAuthenticate = true;
-                if (domain == null)
+                if (userName == null)
                 {
-                    loHttp.Credentials = new System.Net.NetworkCredential(userName, password);
+                    loHttp.UseDefaultCredentials = true;
+                    loHttp.PreAuthenticate = true;
+                    loHttp.Credentials = CredentialCache.DefaultCredentials;
+
                 }
                 else
                 {
-                    loHttp.Credentials = new System.Net.NetworkCredential(userName, password, domain);
+                    loHttp.UseDefaultCredentials = false;
+                    loHttp.PreAuthenticate = true;
+                    if (domain == null)
+                    {
+                        loHttp.Credentials = new System.Net.NetworkCredential(userName, password);
+                    }
+                    else
+                    {
+                        loHttp.Credentials = new System.Net.NetworkCredential(userName, password, domain);
+                    }
                 }
             }
 
@@ -167,7 +198,7 @@ namespace SGcombo.WebUtils
 
                 using (WebResponse response = task2.Result)
                 {
-
+                  
                     Encoding enc = Encoding.UTF8;
 
                     using (Stream stream = response.GetResponseStream())
